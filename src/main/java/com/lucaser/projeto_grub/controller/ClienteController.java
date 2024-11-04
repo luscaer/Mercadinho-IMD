@@ -4,6 +4,7 @@ import com.lucaser.projeto_grub.entity.ClienteEntity;
 import com.lucaser.projeto_grub.model.ClienteDTO;
 import com.lucaser.projeto_grub.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,12 @@ public class ClienteController {
     public ResponseEntity<ClienteEntity> postCliente(@RequestBody ClienteDTO clienteDTO){
         ClienteEntity cliente = new ClienteEntity(clienteDTO);
         return ResponseEntity.ok(clienteService.postCliente(cliente));
+    }
+
+    @PostMapping("/lista")
+    public ResponseEntity<List<ClienteEntity>> postClientes(@RequestBody List<ClienteDTO> clientesDTO){
+        List<ClienteEntity> savedClientes = clienteService.postClientes(clientesDTO);
+        return new ResponseEntity<>(savedClientes, HttpStatus.CREATED);
     }
 
     @PutMapping

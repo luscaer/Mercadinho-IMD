@@ -4,6 +4,7 @@ import com.lucaser.projeto_grub.entity.ProdutoEntity;
 import com.lucaser.projeto_grub.model.ProdutoDTO;
 import com.lucaser.projeto_grub.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,12 @@ public class ProdutoController {
         ProdutoEntity produto = new ProdutoEntity(produtoDTO);
         ProdutoEntity novoProduto = produtoService.postProduto(produto);
         return ResponseEntity.ok(novoProduto);
+    }
+
+    @PostMapping("/lista")
+    public ResponseEntity<List<ProdutoEntity>> postProdutos(@RequestBody List<ProdutoDTO> produtosDTO){
+        List<ProdutoEntity> savedProdutos = produtoService.postProdutos(produtosDTO);
+        return new ResponseEntity<>(savedProdutos, HttpStatus.CREATED);
     }
 
     @PutMapping

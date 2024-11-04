@@ -1,11 +1,13 @@
 package com.lucaser.projeto_grub.service;
 
 import com.lucaser.projeto_grub.entity.ProdutoEntity;
+import com.lucaser.projeto_grub.model.ProdutoDTO;
 import com.lucaser.projeto_grub.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -24,6 +26,24 @@ public class ProdutoService {
     public ProdutoEntity postProduto(ProdutoEntity produto){
         return produtoRepository.save(produto);
     }
+
+    public List<ProdutoEntity> postProdutos(List<ProdutoDTO> produtoDTOs) {
+        List<ProdutoEntity> produtos = produtoDTOs.stream()
+                .map(dto -> {
+                    ProdutoEntity produto = new ProdutoEntity();
+                    produto.setNomeProduto(dto.nomeProduto());
+                    produto.setMarca(dto.marca());
+                    produto.setDataFabricacao(dto.dataFabricacao());
+                    produto.setDataValidade(dto.dataValidade());
+                    produto.setGenero(ProdutoEntity.GeneroProduto.valueOf(dto.genero()));
+                    produto.setLote(dto.lote());
+                    return produto;
+                })
+                .collect(Collectors.toList());
+
+        return produtoRepository.saveAll(produtos);
+    }
+
 
     public ProdutoEntity putProduto(ProdutoEntity produto){
         ProdutoEntity produtoExistente = getById(produto.getId());

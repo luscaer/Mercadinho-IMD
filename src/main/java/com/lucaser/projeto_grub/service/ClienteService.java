@@ -1,11 +1,13 @@
 package com.lucaser.projeto_grub.service;
 
 import com.lucaser.projeto_grub.entity.ClienteEntity;
+import com.lucaser.projeto_grub.model.ClienteDTO;
 import com.lucaser.projeto_grub.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
@@ -23,6 +25,21 @@ public class ClienteService {
 
     public ClienteEntity postCliente(ClienteEntity cliente){
         return clienteRepository.save(cliente);
+    }
+
+    public List<ClienteEntity> postClientes(List <ClienteDTO> clientesDto){
+        List<ClienteEntity> clientes = clientesDto.stream()
+                .map(dto -> {
+                    ClienteEntity cliente = new ClienteEntity();
+                    cliente.setNome(dto.nome());
+                    cliente.setCpf(dto.cpf());
+                    cliente.setGenero(ClienteEntity.GeneroCliente.valueOf(dto.genero()));
+                    cliente.setDataNascimento(dto.dataNascimento());
+                    return cliente;
+                })
+                .collect(Collectors.toList());
+
+        return clienteRepository.saveAll(clientes);
     }
 
     public ClienteEntity putCliente(ClienteEntity cliente){
