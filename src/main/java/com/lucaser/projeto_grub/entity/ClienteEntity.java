@@ -2,11 +2,15 @@ package com.lucaser.projeto_grub.entity;
 
 import com.lucaser.projeto_grub.model.ClienteDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.util.Date;
 
@@ -21,12 +25,19 @@ public class ClienteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "O nome do cliente não pode estar vazio.")
+    @Size(max = 100, message = "O nome do cliente deve ter no máximo 100 caracteres.")
     private String nome;
+
+    @CPF(message = "O CPF informado é inválido.")
     private String cpf;
 
+    @NotNull(message = "O gênero deve ser especificado.")
     @Enumerated(EnumType.STRING)
     private GeneroCliente genero;
 
+    @Past(message = "A data de nascimento deve ser uma data passada.")
+    @NotNull(message = "A data de nascimento é obrigatória.")
     private Date dataNascimento;
 
     private boolean ativo = true;
