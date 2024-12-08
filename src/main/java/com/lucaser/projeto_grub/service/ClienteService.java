@@ -24,7 +24,7 @@ public class ClienteService {
     }
 
     public ClienteEntity postCliente(ClienteDTO clienteDTO){
-        ClienteEntity cliente =new ClienteEntity(clienteDTO);
+        ClienteEntity cliente = new ClienteEntity(clienteDTO);
         return clienteRepository.save(cliente);
     }
 
