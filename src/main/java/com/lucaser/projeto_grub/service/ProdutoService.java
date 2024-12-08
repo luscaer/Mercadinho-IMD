@@ -23,7 +23,8 @@ public class ProdutoService {
         return produtoRepository.findById(id).filter(ProdutoEntity::isAtivo).orElseThrow(() -> new IllegalArgumentException("Produto não encontrado ou não se encontra ativo no momento."));
     }
 
-    public ProdutoEntity postProduto(ProdutoEntity produto){
+    public ProdutoEntity postProduto(ProdutoDTO produtoDTO){
+        ProdutoEntity produto = new ProdutoEntity(produtoDTO);
         return produtoRepository.save(produto);
     }
 
@@ -44,8 +45,28 @@ public class ProdutoService {
         return produtoRepository.saveAll(produtos);
     }
 
+    public ProdutoEntity putProduto(ProdutoDTO produtoDTO){
+        if (produtoDTO.id() == null) {
+            throw new IllegalArgumentException("ID é necessário para atualizar um produto.");
+        }
+
+        ProdutoEntity produtoExistente = getById(produtoDTO.id());
+
+        if (produtoDTO.nomeProduto() != null) {produtoExistente.setNomeProduto(produtoDTO.nomeProduto());}
+        if (produtoDTO.marca() != null) {produtoExistente.setMarca(produtoDTO.marca());}
+        if (produtoDTO.dataFabricacao() != null) {produtoExistente.setDataFabricacao(produtoDTO.dataFabricacao());}
+        if (produtoDTO.dataFabricacao() != null) {produtoExistente.setDataValidade(produtoDTO.dataValidade());}
+        if (produtoDTO.genero() != null) {produtoExistente.setGenero(ProdutoEntity.GeneroProduto.valueOf(produtoDTO.genero()));}
+        if (produtoDTO.lote() != null) {produtoExistente.setLote(produtoDTO.lote());}
+
+        return produtoRepository.save(produtoExistente);
+    }
 
     public ProdutoEntity putProduto(ProdutoEntity produto){
+        if (produto.getId() == null) {
+            throw new IllegalArgumentException("ID é necessário para atualizar um produto.");
+        }
+
         ProdutoEntity produtoExistente = getById(produto.getId());
 
         if (produto.getNomeProduto() != null) {produtoExistente.setNomeProduto(produto.getNomeProduto());}

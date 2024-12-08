@@ -23,7 +23,8 @@ public class ClienteService {
         return clienteRepository.findById(id).filter(ClienteEntity::isAtivo).orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado ou não se encontra ativo no momento."));
     }
 
-    public ClienteEntity postCliente(ClienteEntity cliente){
+    public ClienteEntity postCliente(ClienteDTO clienteDTO){
+        ClienteEntity cliente =new ClienteEntity(clienteDTO);
         return clienteRepository.save(cliente);
     }
 
@@ -42,7 +43,26 @@ public class ClienteService {
         return clienteRepository.saveAll(clientes);
     }
 
+    public ClienteEntity putCliente(ClienteDTO clienteDTO){
+        if (clienteDTO.id() == null) {
+            throw new IllegalArgumentException("ID é necessário para atualizar um cliente.");
+        }
+
+        ClienteEntity clienteExistente = getById(clienteDTO.id());
+
+        if (clienteDTO.nome() != null) {clienteExistente.setNome(clienteDTO.nome());}
+        if (clienteDTO.cpf() != null) {clienteExistente.setCpf(clienteDTO.cpf());}
+        if (clienteDTO.genero() != null) {clienteExistente.setGenero(ClienteEntity.GeneroCliente.valueOf(clienteDTO.genero()));}
+        if (clienteDTO.dataNascimento() != null) {clienteExistente.setDataNascimento(clienteDTO.dataNascimento());}
+
+        return clienteRepository.save(clienteExistente);
+    }
+
     public ClienteEntity putCliente(ClienteEntity cliente){
+        if (cliente.getId() == null) {
+            throw new IllegalArgumentException("ID é necessário para atualizar um cliente.");
+        }
+
         ClienteEntity clienteExistente = getById(cliente.getId());
 
         if (cliente.getNome() != null) {clienteExistente.setNome(cliente.getNome());}
@@ -54,6 +74,10 @@ public class ClienteService {
     }
 
     public void deleteCliente(Long id){
+        if (!clienteRepository.existsById(id)) {
+            throw new IllegalArgumentException("Cliente com ID: " + id + " não encontrado.");
+        }
+
         clienteRepository.deleteById(id);
     }
 

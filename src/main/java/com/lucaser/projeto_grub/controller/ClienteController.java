@@ -24,14 +24,13 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteEntity> getById(@PathVariable Long id){
-        ClienteEntity cliente = clienteService.getById(id);
-        return ResponseEntity.ok(cliente);
+        return ResponseEntity.ok(clienteService.getById(id));
     }
 
     @PostMapping
     public ResponseEntity<ClienteEntity> postCliente(@RequestBody ClienteDTO clienteDTO){
-        ClienteEntity cliente = new ClienteEntity(clienteDTO);
-        return ResponseEntity.ok(clienteService.postCliente(cliente));
+        ClienteEntity cliente = clienteService.postCliente(clienteDTO);
+        return ResponseEntity.ok(cliente);
     }
 
     @PostMapping("/lista")
@@ -41,8 +40,8 @@ public class ClienteController {
     }
 
     @PutMapping
-    public ResponseEntity<ClienteEntity> putProduto(@RequestBody ClienteEntity clienteEntity){
-        ClienteEntity clienteAtualizado = clienteService.putCliente(clienteEntity);
+    public ResponseEntity<ClienteEntity> putProduto(@RequestBody ClienteDTO clienteDTO){
+        ClienteEntity clienteAtualizado = clienteService.putCliente(clienteDTO);
         return ResponseEntity.ok(clienteAtualizado);
     }
 

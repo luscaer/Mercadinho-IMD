@@ -24,15 +24,13 @@ public class ProdutoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoEntity> getById(@PathVariable Long id){
-        ProdutoEntity produto = produtoService.getById(id);
-        return ResponseEntity.ok(produto);
+        return ResponseEntity.ok(produtoService.getById(id));
     }
 
     @PostMapping
     public ResponseEntity<ProdutoEntity> postProduto(@RequestBody ProdutoDTO produtoDTO){
-        ProdutoEntity produto = new ProdutoEntity(produtoDTO);
-        ProdutoEntity novoProduto = produtoService.postProduto(produto);
-        return ResponseEntity.ok(novoProduto);
+        ProdutoEntity produto = produtoService.postProduto(produtoDTO);
+        return ResponseEntity.ok(produto);
     }
 
     @PostMapping("/lista")
@@ -42,8 +40,8 @@ public class ProdutoController {
     }
 
     @PutMapping
-    public ResponseEntity<ProdutoEntity> putProduto(@RequestBody ProdutoEntity produtoEntity){
-        ProdutoEntity produtoAtualizado = produtoService.putProduto(produtoEntity);
+    public ResponseEntity<ProdutoEntity> putProduto(@RequestBody ProdutoDTO produtoDTO){
+        ProdutoEntity produtoAtualizado = produtoService.putProduto(produtoDTO);
         return ResponseEntity.ok(produtoAtualizado);
     }
 
