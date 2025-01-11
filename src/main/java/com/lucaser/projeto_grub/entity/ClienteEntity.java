@@ -42,7 +42,6 @@ public class ClienteEntity {
 
     private boolean ativo = true;
 
-
     public ClienteEntity(ClienteDTO clienteDTO){
         this.nome = clienteDTO.nome();
         this.cpf = clienteDTO.cpf();
@@ -56,3 +55,5 @@ public class ClienteEntity {
         OUTRO;
     }
 }
+
+//ADICIONAR UMA RELAÇÃO CLIENTE PEDIDOS: LIST<PEDIDOENTITY> PEDIDOS COM JSON IGNORE

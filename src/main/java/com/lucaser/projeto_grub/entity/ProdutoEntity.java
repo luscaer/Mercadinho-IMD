@@ -63,3 +63,5 @@ public class ProdutoEntity {
         LIMPEZA;
     }
 }
+
+//ADICIONAR UMA RELAÇÃO PRODUTO PEDIDOS: PEDIDOENTITY PEDIDO COM JSON IGNORE
