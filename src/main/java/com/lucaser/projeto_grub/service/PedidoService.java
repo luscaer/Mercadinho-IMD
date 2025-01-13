@@ -4,7 +4,6 @@ import com.lucaser.projeto_grub.entity.ClienteEntity;
 import com.lucaser.projeto_grub.entity.PedidoEntity;
 import com.lucaser.projeto_grub.entity.ProdutoEntity;
 import com.lucaser.projeto_grub.model.PedidoDTO;
-import com.lucaser.projeto_grub.model.ProdutoDTO;
 import com.lucaser.projeto_grub.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,13 +37,22 @@ public class PedidoService {
                 .map(produtoService::getById)
                 .toList();
 
-        return PedidoEntity.builder()
+        PedidoEntity pedido = PedidoEntity.builder()
                 .id(pedidoDTO.id())
                 .codigo(pedidoDTO.codigo())
-                .cliente(cliente)
                 .produtos(produtos)
+                .cliente(cliente)
+                .status(PedidoEntity.StatusPedido.PENDENTE)
                 .ativo(true)
                 .build();
+
+        produtos.forEach(produto -> {
+            produto.setPedido(pedido); // Configura a relação bidirecional
+        });
+
+        pedido.setProdutos(produtos);
+
+        return pedido;
     }
 
     public PedidoEntity postPedido(PedidoDTO pedidoDTO){
@@ -88,6 +96,9 @@ public class PedidoService {
     public void deleteLogic(Long id) {
         PedidoEntity pedido = getById(id);
         pedido.setAtivo(false);
+
+        pedido.getProdutos().forEach(produto -> produto.setAtivo(false));
+
         pedidoRepository.save(pedido);
     }
 
@@ -106,6 +117,8 @@ public class PedidoService {
         PedidoEntity pedido = getById(id);
         ProdutoEntity produto = produtoService.getById(produtoId);
 
+        produto.setPedido(pedido);
+
         pedido.getProdutos().add(produto);
 
         return pedidoRepository.save(pedido);
@@ -114,6 +127,8 @@ public class PedidoService {
     public PedidoEntity removerProduto(Long id, Long produtoId) {
         PedidoEntity pedido = getById(id);
         ProdutoEntity produto = produtoService.getById(produtoId);
+
+        produto.setPedido(null);
 
         pedido.getProdutos().remove(produto);
         return pedidoRepository.save(pedido);

@@ -1,8 +1,10 @@
 package com.lucaser.projeto_grub.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.lucaser.projeto_grub.entity.ProdutoEntity;
 import com.lucaser.projeto_grub.model.ProdutoDTO;
 import com.lucaser.projeto_grub.service.ProdutoService;
+import com.lucaser.projeto_grub.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +20,13 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @GetMapping
+    @JsonView(Views.PedidoResumo.class)
     public List<ProdutoEntity> getAll(){
         return produtoService.getAll();
     }
 
     @GetMapping("/{id}")
+    @JsonView(Views.PedidoDetalhado.class)
     public ResponseEntity<ProdutoEntity> getById(@PathVariable Long id){
         return ResponseEntity.ok(produtoService.getById(id));
     }
