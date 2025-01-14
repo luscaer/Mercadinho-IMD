@@ -80,12 +80,8 @@ public class ClienteService {
 
         ClienteEntity cliente = getById(id);
 
-        // Desassocia o cliente de todos os seus pedidos
         cliente.getPedidos().forEach(pedido -> pedido.setCliente(null));
 
-        // A exclusão do cliente e seus pedidos será feita automaticamente
-        // devido ao CascadeType.ALL e orphanRemoval = true, mas vamos garantir
-        // que os pedidos sejam removidos da lista de pedidos do cliente antes.
         clienteRepository.deleteById(id);
     }
 

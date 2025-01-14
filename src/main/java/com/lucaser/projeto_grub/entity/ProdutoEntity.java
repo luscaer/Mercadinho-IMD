@@ -56,7 +56,7 @@ public class ProdutoEntity {
     @JsonView({Views.PedidoResumo.class})
     private String lote;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id")
     @JsonIgnoreProperties({"produtos", "cliente"})
     @JsonView({Views.PedidoDetalhado.class})

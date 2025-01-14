@@ -128,9 +128,13 @@ public class PedidoService {
         PedidoEntity pedido = getById(id);
         ProdutoEntity produto = produtoService.getById(produtoId);
 
-        produto.setPedido(null);
+        pedido.getProdutos().removeIf(p -> p.getId().equals(produtoId));
 
-        pedido.getProdutos().remove(produto);
+        if (produto.getPedido() != null && produto.getPedido().getId().equals(id)) {
+            produto.setPedido(null);
+            produtoService.putProduto(produto);
+        }
+
         return pedidoRepository.save(pedido);
     }
 }

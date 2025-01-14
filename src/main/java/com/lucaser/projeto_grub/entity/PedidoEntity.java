@@ -32,7 +32,7 @@ public class PedidoEntity {
     @JsonView({Views.PedidoResumo.class})
     private String codigo;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pedido", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false)
     @NotEmpty(message = "A lista de produtos não pode estar vazia.")
     @JsonIgnoreProperties({"pedido"})
     @JsonView(Views.PedidoDetalhado.class)
